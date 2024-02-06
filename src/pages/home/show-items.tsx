@@ -2,10 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 
 import { flags } from '@/api/search-all-flags'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Country } from '@/utils/Country'
 
 import { FlagCard } from './flag-card'
-import { Country } from './types' // Certifique-se de importar o tipo Country corretamente
-
 interface ShowItemsProps {
   searchText: string
   searchTextInput?: string
