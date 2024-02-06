@@ -1,27 +1,38 @@
-import { useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
-import { flags } from '@/api/search-all-flags'
+import { FilterMenu } from '@/components/filter-menu'
+import { Input } from '@/components/ui/input'
+
+import { ShowItems } from './show-items'
 
 export function Home() {
-  const { data: orders, isLoading: Loading } = useQuery({
-    queryKey: ['orders'],
-    queryFn: flags,
-  })
-  console.log(orders)
+  const [searchText, setSearchText] = useState('')
+  const [filter, setFilter] = useState<string | undefined>(undefined)
+  const location = useLocation()
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const filterParam = searchParams.get('filter') ?? undefined
+    setFilter(filterParam)
+  }, [location.search])
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value)
+  }
 
   return (
-    <div>
-      {Loading ? (
-        <p>carregando...</p>
-      ) : (
-        orders.map((order) => (
-          <>
-            <img src={order?.flags.png} alt="" />
-            <h1 key={order.name.common}>{order.name.common}</h1>
-            <p>{order.area}</p>
-          </>
-        ))
-      )}
+    <div className="flex w-full flex-col gap-10 p-10">
+      <div className="flex w-full justify-between pl-16 pr-20">
+        <Input
+          placeholder="Search for a country"
+          className="w-[300px]"
+          value={searchText}
+          onChange={handleSearchChange}
+        />
+        <FilterMenu />
+      </div>
+      <ShowItems searchText={searchText} searchTextInput={filter} />
     </div>
   )
 }

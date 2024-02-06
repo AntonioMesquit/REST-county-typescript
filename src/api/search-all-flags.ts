@@ -1,5 +1,5 @@
 import { api } from '@/lib/axios'
-interface Country {
+export interface Country {
   name: {
     common: string
     official: string
@@ -62,5 +62,6 @@ interface Country {
 
 export async function flags() {
   const response = await api.get<Country>('all')
+  console.log(response.data)
   return response.data
 }
